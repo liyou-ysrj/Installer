@@ -1,0 +1,58 @@
+打包应该实现的功能：
+================================================================函数===========================================================================
+1.创建一个解包时输出的目录int CX_CreateDirectory(std::string dirname) 输入为要创建的目录，返回值为状态值
+2.将一个文件加入到目录 int CX_CreateFile(int h_dir,std::string filename) 创建指定目录下的文件名为filename的文件
+3.int CX_SetDirectoryOption(std::string dirname,int option,void* value,int value_size) 修改目录的属性，如是否隐藏，可读可写之类的值，h_dir是目录句柄，option是要修改的属性索引，value是要设置为的值，value_size是value所指向的值的长度，返回值表示这个操作的状态，如失败或者成功，失败的话有不同的值指示失败原因，directory的option用enum directory_option定义
+4.int CX_SetFileOption(std::string dirname,std::string filename,int option,void* value,int value_size) 同上，只是修改的是file的属性，file的option用enum file_option表示
+
+5.int CX_GetDirectoryOption(std::string dir,int option,void* value,int value_size)同Set，但是如果给的value的长度少于option的长度，那么会返回错误，同时设置value为0
+6.int CX_GetFileOption(std::string dirname,std::string filename,int option,void* value,int value_size)同上
+7.std::vector<std::string> CX_GetAllDirectoryName();
+8 std::vector<std::string> CX_GetAllFileInDirectoryName();函数可以重载实现通过不同方法操作目录或者文件
+
+==============================================================数据结构定义======================================================================
+目录和文件用下面的结构保存
+std::map<std::string,std::map<std::string,std::vector<std::string>>>
+参数一次为dirname,filename,fileoption
+
+
+
+directory的option又directory_option定义
+enum directory_key
+{
+	DK_NAME,
+	DK_PROPERTY,
+	DK_FILENUM,
+	DK_NONE
+};
+
+enum directory_property		//设置这个option需要用一个__int32_t类型的值
+{
+	DP_HIDDEN=0x1,	//设置目录是否隐藏，设置值为1时为隐藏，0为不隐藏，默认为0
+	DP_READONLY=0x2,	//设置目录是否只读，设置值为1时为只读，0为可写，默认为0
+	DP_SYSTEM=0x4,	//设置目录是否是系统目录，设置值为1时为系统目录，0为普通目录，默认为0
+	DP_NONE=0x8		//设置目录为默认属性，将上面的值设置为默认
+
+};
+
+enum file_key
+{
+	FK_SRCNAME,
+	FK_TARGETNAME,
+	FK_PROPERTY,
+	FK_COMPRESSTYPE,
+	FK_NONE
+};
+enum file_compress_type
+{
+	FCT_GZIP,	//使用gzip压缩方式
+	FCT_DEFLATE,	//使用deflate方式
+	FCT_NONE	//不压缩，按原文放进
+
+};
+
+
+打包文件内部的结构应该是这样的
+首先是一个目录文件分配表，记录了目录的信息和目录下的文件在文件中的位置
+DirectoryInfo:DirectoryNameSize(__uint64_t)+DirectoryName(char*)+DirectoryProperty(enum directory)+FileNumInDirectory(__uint64_t)
+FileInfo:FileNameSize(__uint64_t)+FileName(char*)+ [FileCompressType(enum file_compress_type=FCT_NONE)+FileSize(__uint64_t)+FileData(char*)] | [FileCompressType(enum file_compress_type!=FCT_NONE)+FileBlockTotalSize(uint64_t)+FileBlockNum(__uint64_t)+FileBlockSize(__uint64)+FileBlockData(char*)....直到最后一个block] 

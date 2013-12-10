@@ -1,0 +1,23 @@
+#ifndef CX_DEFINE_H
+#define CX_DEFINE_H
+
+#define CX_OK 0
+#define CX_FAILD 0x1
+#define CX_DIRALREADYEXIST 0X2
+#define CX_DIRNOTEXIST 0X3
+#define CX_FILEALREADYEXIST 0x4
+#define CX_FILENOTEXIST 0X5
+#define CX_WRONGVALUESIZE 0X6
+#define CX_WRONGKEY 0X7
+#define CX_LAST 0XFFFFFFFF
+#endif
+
+
+
+
+
+
+
+
+
+
