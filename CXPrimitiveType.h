@@ -1,9 +1,8 @@
 #ifndef CX_PRIMITIVE_TYPE_H
 #define CX_PRIMITIVE_TYPE_H
 
-
-#ifdef unix
 #include <sys/types.h>
+#ifdef unix
 typedef __int8_t CX_INT8;
 typedef __uint8_t CX_UINT8;
 typedef __int32_t CX_INT32;

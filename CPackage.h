@@ -18,28 +18,30 @@ class CPackage
  public:
   CPackage();
   CPackage(std::string package_name);//安装程序的名字
-  
+  ~CPackage();
  public:
+  CX_INT32 CX_CreatePackage(std::string package_name);
   CX_INT32 CX_CreateDirectory(std::string dirname);
 
   CX_INT32 CX_CreateFile(std::string dirname,std::string filename);
 
-  CX_INT32 CX_SetDirectoryOption(std::string dirname,directory_key key,void* value,CX_INT32* value_size);//这种类型的函数输入的value_size在函数返回时都会被设置成对应的值的大小
+  CX_INT32 CX_SetDirectoryOption(std::string dirname,CX_UINT32 key,void* value,CX_INT32* value_size);
 
-  CX_INT32 CX_SetFileOption(std::string dirname,std::string filename,file_key key,void* value,CX_INT32* value_size); 
+  CX_INT32 CX_SetFileOption(std::string dirname,std::string filename,CX_UINT32 key,void* value,CX_INT32* value_size); 
 
 
-  CX_INT32 CX_GetDirectoryOption(std::string dirname,std::string filename,directory_key key,void* value,CX_INT32* value_size);
+  CX_INT32 CX_GetDirectoryOption(std::string dirname,CX_UINT32 key,void* value,CX_INT32* value_size);
 
-  CX_INT32 CX_GetFileOption(std::string dirname,std::string filename,file_key key,void* value,CX_INT32* value_size);
+  CX_INT32 CX_GetFileOption(std::string dirname,std::string filename,CX_UINT32 key,void* value,CX_INT32* value_size);
 
   std::vector<std::string> CX_GetAllDirectoryName();
 
-  std::vector<std::string> CX_GetAllFileInDirectoryName();
+  std::vector<std::string> CX_GetAllFileInDirectoryName(std::string dirname);
  private:
   CX_Dir_File dir_file;
   std::ofstream m_package;
   std::ifstream m_srcfile;
+  CX_UINT32 default_dk_property,default_fk_prorerty,default_fk_compresstype;
 };
 
 

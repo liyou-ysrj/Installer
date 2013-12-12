@@ -3,7 +3,6 @@
 
 
 #include "CXdefine.h"
-#include "CXtype.h"
 #include "CXPrimitiveType.h"
 
 #endif
