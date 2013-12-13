@@ -7,6 +7,9 @@
 #include <map>
 #include <string>
 #include <fstream>
+
+
+
 class CPackage
 {
  public:
@@ -21,20 +24,19 @@ class CPackage
   ~CPackage();
  public:
   CX_INT32 CX_CreatePackage(std::string package_name);
-  CX_INT32 CX_CreateDirectory(std::string dirname);
-
+  CX_INT32 CX_CreateTopDirectory(std::string dirname);
+  CX_INT32 CX_CreateSubDirectory(std::string dirname,std::string subdir);
   CX_INT32 CX_CreateFile(std::string dirname,std::string filename);
 
-  CX_INT32 CX_SetDirectoryOption(std::string dirname,CX_UINT32 key,void* value,CX_INT32* value_size);
-
-  CX_INT32 CX_SetFileOption(std::string dirname,std::string filename,CX_UINT32 key,void* value,CX_INT32* value_size); 
-
-
-  CX_INT32 CX_GetDirectoryOption(std::string dirname,CX_UINT32 key,void* value,CX_INT32* value_size);
-
-  CX_INT32 CX_GetFileOption(std::string dirname,std::string filename,CX_UINT32 key,void* value,CX_INT32* value_size);
-
-  std::vector<std::string> CX_GetAllDirectoryName();
+  CX_INT32 CX_SetDirectoryProperty(std::string dirname,CX_UINT32 value);
+  CX_INT32 CX_SetFileInputFileName(std::string dirname,std::string filename,std::string inputfilename);
+  CX_INT32 CX_SetFileProperty(std::string dirname,std::string filename,CX_UINT32 value);
+  CX_INT32 CX_SetFileCompressType(std::string dirname,std::string filename,CX_UINT32 value);
+  CX_INT32 CX_GetDirectoryProperty(std::string dirname,CX_UINT32* value);
+  CX_INT32 CX_GetFileInputFileName(std::string dirname, std::string filename,std::string& intputfilename);
+  CX_INT32 CX_GetFileProperty(std::string dirname,std::string filename,CX_UINT32* value);
+  CX_INT32 CX_GetFileCompressType(std::string dirname,std::string filename,CX_UINT32* value);
+  std::vector<std::string> CX_GetAllTopDirectoryName();
 
   std::vector<std::string> CX_GetAllFileInDirectoryName(std::string dirname);
  private:
