@@ -54,7 +54,6 @@ CX_INT32 CPackage::CX_CreateSubDirectory(std::string dirname,std::string subdir)
   CX_Dir_File::iterator ret=dir_file.find(dirname+subdir);
   if(ret!=dir_file.end())
     return CX_FILEALREADYEXIST;
-
   //给父目录增加一个类型为TYPE_DIR文件，让父目录知道增加了一个子目录
   CX_UINT32 tmp=TYPE_DIR;
   std::string tmp_str;
@@ -67,16 +66,17 @@ CX_INT32 CPackage::CX_CreateSubDirectory(std::string dirname,std::string subdir)
   dir_file[dirname][subdir].push_back(tmp_str);  //DK_PROPERTY
 
   //在目录映射中增加一个新目录，并且标记为子目录
-  dir_file[dirname].insert(CX_File_Pair(subdir,std::vector<std::string>()));
-  dir_file[dirname].insert(CX_File_Pair(".",std::vector<std::string>()));
+  std::string fullsubdir=dirname+subdir;
+  dir_file.insert(CX_Dir_Pair(fullsubdir,CX_File()));
+  dir_file[fullsubdir].insert(CX_File_Pair(".",std::vector<std::string>()));
   tmp=TYPE_DIR;
   tmp_str.assign((char*)&tmp,sizeof(CX_UINT32));  
-  dir_file[dirname]["."].push_back(tmp_str);  //VALUE_TYPE
+  dir_file[fullsubdir]["."].push_back(tmp_str);  //VALUE_TYPE
   tmp=DT_NO;
   tmp_str.assign((char*)&tmp,sizeof(CX_UINT32));
-  dir_file[dirname]["."].push_back(tmp_str);
+  dir_file[fullsubdir]["."].push_back(tmp_str);
   tmp_str.assign((char*)&default_dk_property,sizeof(CX_UINT32));  
-  dir_file[dirname]["."].push_back(tmp_str);  //DK_PROPERTY
+  dir_file[fullsubdir]["."].push_back(tmp_str);  //DK_PROPERTY
 
   return CX_OK;
 }
